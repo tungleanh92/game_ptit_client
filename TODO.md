@@ -1,0 +1,8 @@
+- score meter (hit error)
+- current time / remaining time
+- breaks
+- preview audio
+- skin change
+- spinner bonus
+- add official osu api search (server needed, add cors!)
+- volume settings

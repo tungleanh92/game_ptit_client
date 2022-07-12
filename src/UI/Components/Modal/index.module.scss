@@ -1,0 +1,22 @@
+@use '../../variables.scss';
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000aa;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.modalBox {
+  background-color: variables.$dark-color;
+  padding: 30px;
+  cursor: default;
+  max-height: 100%;
+  box-sizing: border-box;
+}
