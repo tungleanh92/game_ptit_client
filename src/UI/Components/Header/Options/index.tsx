@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Modal from '../../Modal';
 import style from '../index.module.scss';
 import AnimationsOption from './AnimationsOption';

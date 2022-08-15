@@ -1,5 +1,7 @@
+import React, { useContext } from 'react';
 import { BeatmapFiles } from '../BeatmapUpload';
 import style from './index.module.scss';
+import { TransactionContext } from '../../../context/TransactionContext';
 
 type Props = {
   beatmap?: BeatmapFiles;
@@ -8,6 +10,10 @@ type Props = {
 };
 
 export default function BeatmapInfo({ beatmap, version, onSelect }: Props) {
+  const { joinGameData, handleChangeJoinGame
+    // eslint-disable-next-line
+   } = useContext<any>(TransactionContext);
+  
   const diff = beatmap?.difficulties.find(d => d.data.version === version);
 
   if (beatmap == null || diff == null) {
@@ -26,8 +32,8 @@ export default function BeatmapInfo({ beatmap, version, onSelect }: Props) {
         style={
           diff.info.background
             ? {
-                backgroundImage: `url(${diff.info.background})`
-              }
+              backgroundImage: `url(${diff.info.background})`
+            }
             : {}
         }
       />
@@ -43,6 +49,18 @@ export default function BeatmapInfo({ beatmap, version, onSelect }: Props) {
           Length: {min}:{sec}
         </p>
       </div>
+      <p style={{margin: '10px 16px'}} >Choose amount of token to play</p>
+      <select
+        placeholder="Amount (ETH) to play game"
+        value={joinGameData}
+        onChange={handleChangeJoinGame}
+        style={{margin: '0 16px'}}
+        className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+      >
+        <option value="100">100</option>
+        <option value="200">200</option>
+        <option value="300">300</option>
+      </select>
       <button className={style.playButton} onClick={onSelect}>
         Play
       </button>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useContext } from 'react';
 import Game, { BeatmapFile, Stats } from '../Game';
 import { BeatmapData } from '../Game/Loader/BeatmapLoader';
 import { onPause } from '../Game/lock';
@@ -7,6 +7,8 @@ import ResultModal from './Components/ResultModal';
 import style from './index.module.scss';
 import Menu from './Menu';
 import { CursorType, defaultOptions, Options } from './options';
+import { TransactionContext } from '../context/TransactionContext';
+import { errors } from 'ethers';
 
 type Props = {
   supportsRawInput: boolean;
@@ -30,6 +32,9 @@ export default function Root({ supportsRawInput }: Props) {
       setOptions(options => ({ ...options, ...o }))
   });
   const [result, setResult] = useState<Stats | null>(null);
+  const { joinGame, winnerClaim
+    // eslint-disable-next-line
+   } = useContext<any>(TransactionContext);
 
   // Update game options
   useEffect(() => {
@@ -65,12 +70,13 @@ export default function Root({ supportsRawInput }: Props) {
         alert("This beatmap is missing its audio file and can't be played!");
         return;
       }
-
+      
       // Load beatmap
       await game.current.loadBeatmap(data, bgFile, audioFile);
       setPlaying(true);
       setPaused(false);
       game.current.play();
+      await joinGame()
     },
     [gameLoaded]
   );
@@ -79,11 +85,6 @@ export default function Root({ supportsRawInput }: Props) {
   const onResume = () => {
     setPaused(false);
     game.current.resume();
-  };
-
-  const onRetry = () => {
-    setPaused(false);
-    game.current.retry();
   };
 
   const onQuit = () => {
@@ -101,6 +102,25 @@ export default function Root({ supportsRawInput }: Props) {
     });
   }, []);
 
+  useEffect(() => {
+    if (!playing && result) {
+      const doWinnerClaim = async () => {
+        await winnerClaim()
+      }
+    
+      console.log(playing, 'playing');
+      const accuracy = (result.gameResult.accuracy * 100).toLocaleString('en-US', {
+        maximumFractionDigits: 2
+      });
+      // if (parseInt(accuracy) >= 75) {
+        // sign win game 
+        doWinnerClaim().catch(console.error)
+      // }
+      console.log(parseInt(accuracy));
+      console.log(typeof(parseInt(accuracy)));
+    }
+  }, [playing])
+
   return (
     <>
       <div className={playing ? style.playingRoot : style.root}>
@@ -108,7 +128,7 @@ export default function Root({ supportsRawInput }: Props) {
         <Menu options={options} onSelect={onPlay} />
       </div>
       {paused && (
-        <PauseScreen onResume={onResume} onRetry={onRetry} onQuit={onQuit} />
+        <PauseScreen onResume={onResume} onQuit={onQuit} />
       )}
     </>
   );

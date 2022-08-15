@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component, createRef } from 'react';
 
 type ItemProps = {

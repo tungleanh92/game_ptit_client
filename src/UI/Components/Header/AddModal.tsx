@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CheeseGull from '../../Sources/CheeseGull';
 import Sayobot from '../../Sources/Sayobot';
 import { BeatmapFiles } from '../BeatmapUpload';

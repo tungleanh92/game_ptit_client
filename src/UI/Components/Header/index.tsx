@@ -1,8 +1,10 @@
+import React from 'react';
 import { BeatmapFiles } from '../BeatmapUpload';
 import AddModal from './AddModal';
 import style from './index.module.scss';
 import LoadModal from './LoadModal';
 import Options from './Options';
+import Wallet from './WalletManage'
 
 type Props = {
   onAdd: (beatmaps: BeatmapFiles[]) => void;
@@ -18,6 +20,7 @@ export default function Header({ onAdd }: Props) {
       <LoadModal onLoad={onAdd} />
       <AddModal onAdd={onAdd} />
       <Options />
+      <Wallet />
     </div>
   );
 }

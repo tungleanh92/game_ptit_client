@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component, createRef } from 'react';
 import OptionsContext from '../../options';
 import VirtualListItem from './VirtualListItem';

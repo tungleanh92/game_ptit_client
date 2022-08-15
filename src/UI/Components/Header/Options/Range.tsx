@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { useDebounce } from '../../../util';
 import style from './index.module.scss';

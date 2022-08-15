@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import OptionsContext, { CursorType } from '../../../options';
 import Modal from '../../Modal';
 import style from './index.module.scss';

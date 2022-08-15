@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { SayobotBeatmapInfo } from '../../API/SayobotAPI';
 import BeatmapCard from '../../Components/BeatmapCard';
 

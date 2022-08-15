@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import OptionsContext from '../../../options';
 import style from './index.module.scss';
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Stats } from '../../../Game';
 import { HitResultType } from '../../../Game/HitResultController';
 import Modal from '../Modal';

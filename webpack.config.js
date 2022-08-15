@@ -34,6 +34,13 @@ module.exports = async (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.css$/,
+          use: [
+            {"loader": 'style-loader'},
+            {"loader": 'css-loader'}
+          ]
+        },
+        {
           test: /\.tsx?/i,
           exclude: /node_modules/,
           use: {
@@ -152,7 +159,7 @@ module.exports = async (env, argv) => {
     config.devServer = {
       contentBase: path.resolve('./build'),
       host: 'localhost',
-      port: '8080',
+      port: '8081',
       hot: true,
       overlay: true
     };

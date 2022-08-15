@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { BeatmapFiles, BeatmapInfo } from '../BeatmapUpload';
 import DifficultyCircle from '../DifficultyCircle';
 import style from './index.module.scss';

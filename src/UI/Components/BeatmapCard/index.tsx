@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import DifficultyCircle from '../DifficultyCircle';
 import LoadingCircle from '../LoadingCircle';
 import style from './index.module.scss';

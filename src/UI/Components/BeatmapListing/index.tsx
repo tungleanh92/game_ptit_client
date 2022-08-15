@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { BeatmapFile } from '../../../Game';
 import { BeatmapData } from '../../../Game/Loader/BeatmapLoader';
