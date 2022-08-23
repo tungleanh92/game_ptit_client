@@ -126,7 +126,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -159,7 +159,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -187,7 +187,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -214,7 +214,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -284,7 +284,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -313,7 +313,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -336,7 +336,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 

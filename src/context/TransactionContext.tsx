@@ -131,7 +131,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -168,7 +168,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -205,7 +205,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -242,7 +242,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
@@ -291,7 +291,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
     await callApi('updateGame', "POST", {address: wallet.address, amount: joinGameData}, function () {
       return
@@ -328,7 +328,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      // throw new Error("No ethereum object");
     }
   };
 
