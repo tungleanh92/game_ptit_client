@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TransactionContext } from "./context/TransactionContext";
 import styled from "styled-components";
 
@@ -47,16 +47,7 @@ const MainContainer = styled.div`
 const Menu = () => {
   const { handleChangeFaucetClaim, faucetClaimData, faucetClaim } = useContext<any>(TransactionContext);
 
-  const Input = ({ placeholder, name, type, value, handleChange }: any) => (
-    <input
-      placeholder={placeholder}
-      type={type}
-      step="0.0001"
-      value={value}
-      onChange={(e) => handleChange(e, name)}
-      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-    />
-  );
+  const [isDisable, setIsDisable] = useState(false)
 
   return (
     <MainContainer>
@@ -67,7 +58,12 @@ const Menu = () => {
         onChange={handleChangeFaucetClaim}
         type="text"
       />
-      <CreateButton className="menu-btn mt-2" onClick={faucetClaim}>Faucet claim</CreateButton>
+      <CreateButton disabled={isDisable}  className="menu-btn mt-2" onClick={
+        () => {
+          setIsDisable(true)
+          faucetClaim()
+        }
+      }>Faucet claim</CreateButton>
     </MainContainer>
     // <div className="d-flex justify-content-center">
     //   <div className="menu">
