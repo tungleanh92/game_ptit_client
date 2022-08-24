@@ -1,15 +1,29 @@
 import abiVault from "./Vault.json";
 import abiToken from "./PtitToken.json";
 import abiGame from "./NonCompetitiveGameA.json";
+import abiCompetitveGame from "./TwoPlayersV1.json"
 
-export const tokenContractAddress = "0x057ef64E23666F000b34aE31332854aCBd1c8544";
+export const tokenContractAddress = "0xe529B80745e997f4a72453c4c1b2A01eBb29aA02";
 export const contractTokenABI = abiToken.abi;
 
-export const vaultContractAddress = "0x261D8c5e9742e6f7f1076Fa1F560894524e19cad";
+export const vaultContractAddress = "0x93344d455F7cA42558a402033cAF92B930CC9f2e";
 export const contractVaultABI = abiVault.abi;
 
-export const gameContractAddress = "0xCba6b9A951749B8735C603e7fFC5151849248772";
+export const gameContractAddress = "0x7ad81b49892Ea3228dAE7da7C260698e1d329264";
 export const contractGameABI = abiGame.abi;
 
-export const gameCompetitiveContractAddress = "0xCE3478A9E0167a6Bc5716DC39DbbbfAc38F27623";
-export const contractGameCompetitiveABI = abiGame.abi;
+export const gameCompetitiveContractAddress = "0x504dd4054839caDF215E9a9cAC91feCb61e2EAFD";
+export const contractGameCompetitiveABI = abiCompetitveGame.abi;
+
+
+// Rinkerby
+// PtitToken address:  0xe529B80745e997f4a72453c4c1b2A01eBb29aA02
+// Vault address:  0x93344d455F7cA42558a402033cAF92B930CC9f2e
+// Game address:  0x504dd4054839caDF215E9a9cAC91feCb61e2EAFD
+// Game NonCompetitive address:  0x7ad81b49892Ea3228dAE7da7C260698e1d329264
+
+// Goerli
+// PtitToken address:  0x8b68682965ce74f96a504D779FE38aD8B33B417E
+// Vault address:  0xa75A1e72C2C30590119234cde3c6117AC8060D24
+// Game address:  0xFB3F85c4fC405030e158AAB91c26883DeA45655B
+// Game NonCompetitive address:  0xe680C19a6c3A407ae3aEc2569166D13B1104C7e7

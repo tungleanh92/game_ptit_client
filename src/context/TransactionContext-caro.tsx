@@ -241,7 +241,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
 
       const messageHash = ethers.utils.id(randomString);
       const messageHashBytes = ethers.utils.arrayify(messageHash)
-      const signWallet = new ethers.Wallet("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");
+      const signWallet = new ethers.Wallet("aff0f061438b698ab29debb6d3c9efa1855edec3055e70f70751d5f6fad3c927");
       const flatSig = await signWallet.signMessage(messageHashBytes);
 
       let nextGameId = 1;
