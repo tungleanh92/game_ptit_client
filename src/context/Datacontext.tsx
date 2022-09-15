@@ -7,10 +7,12 @@ import { contractGameCompetitiveABI, contractVaultABI, gameCompetitiveContractAd
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { customAlphabet } from 'nanoid'
+import * as urlAPI from '../utils/url'
+
 const nanoid = customAlphabet('1234567890', 6)
 const callApi = async (url: any, method: any, data: any, success: any) => {
     return axios({
-        url: `http://localhost:4000/chess/${url}`,
+        url: `http://${urlAPI.url}${urlAPI.port}/chess/${url}`,
         method: method,
         data: { data: data },
     })

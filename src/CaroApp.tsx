@@ -5,6 +5,7 @@ import socketService from "./Caro-client/services/socketService";
 import { JoinRoom } from "./Caro-client/components/joinRoom";
 import GameContext, { IGameContextProps } from "./context/gameContext";
 import { Game } from "./Caro-client/components/game";
+import * as urlAPI from './utils/url'
 
 const AppContainer = styled.div`
   width: 100%;
@@ -31,7 +32,7 @@ function App() {
 
   const connectSocket = async () => {
     const socket = await socketService
-      .connect("http://localhost:4000")
+      .connect(`http://${urlAPI.url}${urlAPI.port}`)
       .catch((err: any) => {
         console.log("Error: ", err);
       });

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { contractGameABI, contractVaultABI, gameContractAddress, vaultContractAddress } from '../utils/constants';
 import axios from "axios";
+import * as urlAPI from "../utils/url";
 
 export const TransactionContext = React.createContext({});
 
@@ -249,7 +250,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
   // eslint-disable-next-line
   const callApi = async (url: any, method: any, data: any, success: any) => {
     return axios({
-      url: `http://localhost:4000/${url}`,
+      url: `http://${urlAPI.url}${urlAPI.port}/${url}`,
       method: method,
       data: { data: data },
     })

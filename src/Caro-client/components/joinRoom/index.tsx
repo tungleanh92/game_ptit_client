@@ -4,6 +4,7 @@ import gameContext from "../../../context/gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import { TransactionContext } from "../../../context/TransactionContext-caro";
+import * as urlAPI from "../../../utils/url"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IJoinRoomProps { }
@@ -102,9 +103,8 @@ export function JoinRoom(props: IJoinRoomProps) {
 
   const [rooms, setRooms] = useState([]);
   const [socket, setSocket] = useState<any>();
-
   useEffect(() => {
-    socketService.connect('http://localhost:4000/');
+    socketService.connect(`http://${urlAPI.url}${urlAPI.port}`);
     const socket = socketService.socket;
     if (!socket) return;
     socket.emit("update_waiting_games");
