@@ -58,9 +58,8 @@ const Menu = () => {
         onChange={handleChangeFaucetClaim}
         type="text"
       />
-      <CreateButton disabled={isDisable}  className="menu-btn mt-2" onClick={
+      <CreateButton disabled={false}  className="menu-btn mt-2" onClick={
         () => {
-          setIsDisable(true)
           faucetClaim()
         }
       }>Faucet claim</CreateButton>

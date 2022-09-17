@@ -164,8 +164,9 @@ export const DatacontextProvider = (props: ChildrenType) => {
         try {
             if (!ethereum) return alert("Please install MetaMask.");
             const accounts = await ethereum.request({ method: "eth_requestAccounts", });
-
             const transactionsContract = createEthereumVaultContract();
+            console.log('check');
+            
             const balances = await transactionsContract.viewPlayersBalance();
             setWallet({
                 address: accounts[0],
@@ -237,8 +238,7 @@ export const DatacontextProvider = (props: ChildrenType) => {
         }
     };
 
-    const faucetClaim = async (e: any) => {
-        e.preventDefault();
+    const faucetClaim = async () => {
         console.log('faucetClaim');
         try {
             const transactionsContract = createEthereumVaultContract();

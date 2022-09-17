@@ -211,8 +211,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
   };
 
   // eslint-disable-next-line
-  const faucetClaim = async (e: any) => {
-    e.preventDefault();
+  const faucetClaim = async () => {
     console.log('faucetClaim');
     try {
       if (ethereum) {
