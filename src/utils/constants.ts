@@ -3,16 +3,16 @@ import abiToken from "./PtitToken.json";
 import abiGame from "./NonCompetitiveGameA.json";
 import abiCompetitveGame from "./TwoPlayersV1.json"
 
-export const tokenContractAddress = "0x0ddaD434f848f1D4510768636963429B6507f3a9";
+export const tokenContractAddress = "0x70293179EA063Ddb12bF7fF8b8A375f023Eb2270";
 export const contractTokenABI = abiToken.abi;
 
-export const vaultContractAddress = "0xD101b57A6129B4C614a5E3aB4894a68C7699D6CF";
+export const vaultContractAddress = "0xdB2070DD615d4CE105cB69C811DAFE0115c04D39";
 export const contractVaultABI = abiVault.abi;
 
-export const gameContractAddress = "0x49a6621186d5d9052A39db4dAF7a11FaB734a753";
+export const gameContractAddress = "0xEcb1e6e4d44EeB24a6a41443ABd70090ac871E75";
 export const contractGameABI = abiGame.abi;
 
-export const gameCompetitiveContractAddress = "0x795Acc11acffe74a80cDD32D200B5715fDE5AFF5";
+export const gameCompetitiveContractAddress = "0x02Ed01167Edb727E2C9cF75ef2f405E1E3C92AAf";
 export const contractGameCompetitiveABI = abiCompetitveGame.abi;
 
 

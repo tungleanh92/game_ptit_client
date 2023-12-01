@@ -126,7 +126,7 @@ export function JoinRoom(props: IJoinRoomProps) {
     e.preventDefault();
     const socket = socketService.socket;
     if (!socket) return;
-    // await joinGame(amount, roomId)
+    await joinGame(amount, roomId)
     setJoining(true);
     const data = []
     data.push(gameIdName)

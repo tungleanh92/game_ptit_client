@@ -245,7 +245,7 @@ export function Game() {
         setMessage('win')
         const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
         toast(rs);
-        // await winnerClaim()
+        await winnerClaim()
         setInRoom(false)
       }
       if (result == 'tie') {

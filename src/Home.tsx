@@ -6,7 +6,7 @@ import {
     Route,
     NavLink,
 } from "react-router-dom";
-import OsuApp from './OsuApp'
+// import OsuApp from './OsuApp'
 import CaroApp from './CaroApp'
 import ChessApp from './ChessApp'
 import FaucetClaim from './FaucetClaimApp'
@@ -18,11 +18,11 @@ const App = () => {
     return (
         <div className="App">
             <Router>
-                <NavLink
+                {/* <NavLink
                     to="/osu"
                 >
                     Osu
-                </NavLink>
+                </NavLink> */}
                 <NavLink
                     to="/caro"
                 >
@@ -39,13 +39,13 @@ const App = () => {
                     Claim token
                 </NavLink>
                 <Switch>
-                    <Route exact path="/osu">
+                    {/* <Route exact path="/osu">
                         <TransactionsProvider>
                             <div style={{background: '#000316'}}>
                                 <OsuApp />
                             </div>
                         </TransactionsProvider>
-                    </Route>
+                    </Route> */}
                     <Route exact path="/caro">
                         <TransactionsProviderCaro>
                             <CaroApp />

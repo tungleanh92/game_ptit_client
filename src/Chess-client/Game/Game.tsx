@@ -43,11 +43,11 @@ export const Game = () => {
     useEffect(() => {
         socket.on("initiateResign", async (data: any) => {
             if (playerTurn == 'w' && data.player == 'w' && username == usernames[1]) {
-                // await winnerClaim();
+                await winnerClaim();
                 console.log('you win!');
             }
             if (playerTurn == 'b' && data.player == 'b' && username == usernames[0]) {
-                // await winnerClaim();
+                await winnerClaim();
                 console.log('you win!');
             }
             setOpen(true);
@@ -137,11 +137,11 @@ export const Game = () => {
             if (chess.in_checkmate()) {
                 setOpen(true);
                 if (playerTurn == 'w' && username == usernames[0]) {
-                    // await winnerClaim();
+                    await winnerClaim();
                     console.log("you win!");
                 }
                 if (playerTurn == 'b' && username == usernames[1]) {
-                    // await winnerClaim();
+                    await winnerClaim();
                     console.log("you win!");
                 }
             }
@@ -164,7 +164,7 @@ export const Game = () => {
         socket.on("start game", async (users: any) => {
             if (!called) {
                 called = true
-                // await joinGame();
+                await joinGame();
                 setIsStart(true);
                 setUsernames(users);
             }
@@ -173,11 +173,11 @@ export const Game = () => {
 
     async function handleExpireTime() {
         if (playerTurn == 'w' && username == usernames[1]) {
-            // await winnerClaim();
+            await winnerClaim();
             console.log("you win!");
         }
         if (playerTurn == 'b' && username == usernames[0]) {
-            // await winnerClaim();
+            await winnerClaim();
             console.log("you win!");
         }
         setOpen(true);
