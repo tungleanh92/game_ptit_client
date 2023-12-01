@@ -8,7 +8,9 @@ class SocketService {
     url: string
   ): Promise<any> {
     return new Promise((rs, rj) => {
-      this.socket = io(url);
+      this.socket = io(url, {
+        transports: ['websocket']
+      });
 
       if (!this.socket) return rj();
 
@@ -16,10 +18,10 @@ class SocketService {
         rs(this.socket as Socket);
       });
 
-      this.socket.on("connect_error", (err) => {
-        console.log("Connection error: ", err);
-        rj(err);
-      });
+      // this.socket.on("connect_error", (err) => {
+      //   console.log("Connection error: ", err);
+      //   rj(err);
+      // });
     });
   }
 }
