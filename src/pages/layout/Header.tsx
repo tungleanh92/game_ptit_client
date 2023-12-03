@@ -12,6 +12,7 @@ import DepositWithdraw from "../modal/DepositWithdraw";
 import { useCopy } from "../../hooks/useCopy";
 import CopyIcon from "../../icons/CopyIcon";
 import PlayGameIcon from "../../icons/PlayGameIcon";
+import ConnectWalletButton from "../../connect-wallet/ui/connect-wallet-button";
 
 const Header = () => {
   const { connectWallet, wallet } = useContext(AppContext);
@@ -30,7 +31,8 @@ const Header = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setOpenModal(true);
+    connectWallet()
+    // setOpenModal(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -89,7 +91,7 @@ const Header = () => {
           </Stack>
           <Stack direction="row" spacing={2}>
             <DepositWithdraw />
-            <Button
+            {/* <Button
               onClick={handleClick}
               variant="outlined"
               sx={{
@@ -97,7 +99,8 @@ const Header = () => {
               }}
             >
               {wallet?.address ? addressShort : "Connect wallet"}
-            </Button>
+            </Button> */}
+            <ConnectWalletButton />
             <Popover
               open={isModalOpen}
               anchorEl={anchorEl}
