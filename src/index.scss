@@ -1,5 +1,3 @@
-@use './UI/variables.scss';
-
 @font-face {
   font-family: 'Exo 2';
   src: url('fonts/Exo2-VariableFont_wght.woff2')
@@ -20,10 +18,17 @@
   font-style: italic;
 }
 
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 html,
 body,
 #app {
-  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
@@ -32,6 +37,15 @@ body {
   font-family: 'Exo 2';
   background-color: variables.$light-color;
   color: variables.$light-accent;
+
+   font-size: 16px;
+   overflow-x: hidden;
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   width: 100vw;
+   height: calc(var(--vh, 1vh) * 100);
+  //  background-color: "white";
 }
 
 a {

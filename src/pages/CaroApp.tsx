@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { io } from "socket.io-client";
-import socketService from "./Caro-client/services/socketService";
-import { JoinRoom } from "./Caro-client/components/joinRoom";
-import GameContext, { IGameContextProps } from "./context/gameContext";
-import { Game } from "./Caro-client/components/game";
-import * as urlAPI from './utils/url'
+import GameContext, { IGameContextProps } from "../context/gameContext";
+import * as urlAPI from '../utils/url'
+import socketService from "../Caro-client/services/socketService";
+import { JoinRoom } from "../Caro-client/components/joinRoom";
+import { Game } from "../Caro-client/components/game";
 
 const AppContainer = styled.div`
   width: 100%;

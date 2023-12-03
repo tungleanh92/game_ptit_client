@@ -5,7 +5,7 @@ import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import { TransactionContext } from "../../../context/TransactionContext-caro";
 import { Modal, Button } from 'antd';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Timer } from '../../../Chess-client/Game/Timer'
 
 const GameContainer = styled.div`
@@ -354,7 +354,6 @@ export function Game() {
 
   return (
     <GameContainer>
-      <ToastContainer />
       {!isGameStarted && (
         <>
           <h2 style={{ color: "#8e44ad" }}>Waiting for Other Player to Join to Start the Game!</h2>

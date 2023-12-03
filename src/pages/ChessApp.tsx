@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Join } from "./Chess-client/Join/Join";
-import { Navbar } from "./Chess-client/Navbar/Navbar";
-import { Lobby } from "./Chess-client/Lobby/Lobby";
+import { Join } from "../Chess-client/Join/Join";
+import { Lobby } from "../Chess-client/Lobby/Lobby";
 
 function ChessApp() {
     return (
