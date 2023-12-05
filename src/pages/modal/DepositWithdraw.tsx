@@ -4,7 +4,14 @@ import Typography from "@mui/material/Typography";
 import { useToggle } from "../../hooks/useToggle";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useContext, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Stack from "@mui/material/Stack";
 import InputLabel from "@mui/material/InputLabel";
 import InputBase from "@mui/material/InputBase";
@@ -13,16 +20,51 @@ import { AppContext } from "../../context/AppContext";
 
 type DepositWithdrawProps = {};
 const DepositWithdraw = ({}: DepositWithdrawProps) => {
-  const { connectWallet, wallet } = useContext(AppContext);
+  const {
+    balanceToken,
+    wallet,
+    depositData,
+    withdrawData,
+    handleChangeDeposit,
+    handleChangeWithdraw,
+    withdrawToken,
+    depositToken,
+    isLoading,
+    balanceApprove,
+    approveBalance,
+  } = useContext(AppContext);
+
   const [open, setOpen] = useToggle(false);
   const [tab, setTab] = useState<"deposit" | "withdraw">("deposit");
-  const [amountDeposit, setAmountDeposit] = useState("");
-  const [amountWithdraw, setAmountWithdraw] = useState("");
+
+  const styleActionBtn = useMemo(() => {
+    let nameBtn = "";
+    let action: Function;
+    const amount = tab === "deposit" ? depositData : withdrawData;
+
+    if (parseFloat(amount) > parseFloat(balanceApprove) && tab === "deposit") {
+      return { action: approveBalance, nameBtn: "Approve" };
+    }
+
+    if (tab === "deposit") {
+      nameBtn = "Deposit";
+      action = depositToken;
+    } else {
+      nameBtn = "Withdraw";
+      action = withdrawToken;
+    }
+
+    return {
+      nameBtn,
+      action,
+    };
+  }, [balanceApprove, depositToken, withdrawToken, approveBalance, tab]);
 
   const handleValidateNumber = (
-    value: any,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     callback: (data: string) => void
   ) => {
+    const value = e.target.value;
     const re = new RegExp(/[0-9]+$/);
 
     const valid = re.test(value);
@@ -31,14 +73,15 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
     }
   };
 
+  const reset = () => {
+    handleChangeDeposit("");
+    handleChangeWithdraw("");
+  };
+
   useEffect(() => {
     reset();
   }, [tab]);
 
-  const reset = () => {
-    setAmountDeposit("");
-    setAmountWithdraw("");
-  };
   return (
     <>
       <Typography
@@ -94,62 +137,72 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
               }}
             />
           </Tabs>
-          <Box mt={3}>
-            {tab === "deposit" && (
+          <form onSubmit={styleActionBtn.action}>
+            <Box mt={3}>
               <Stack direction="column" spacing={2}>
-                <InputLabel sx={{ color: "#d1d4dc" }}>Amount1</InputLabel>
-                <InputBase
-                  fullWidth
-                  required
-                  type="number"
-                  id="1"
-                  value={amountDeposit || ""}
-                  onChange={(e) =>
-                    handleValidateNumber(e.target.value, setAmountDeposit)
-                  }
+                <InputLabel sx={{ color: "#d1d4dc" }}>Amount</InputLabel>
+                {tab === "deposit" ? (
+                  <InputBase
+                    fullWidth
+                    required
+                    type="number"
+                    id="1"
+                    value={depositData || ""}
+                    onChange={(e) =>
+                      handleValidateNumber(e, handleChangeDeposit)
+                    }
+                    sx={{
+                      fontSize: "16px",
+                      "& .MuiInputBase-input": {
+                        padding: "10px",
+                        backgroundColor: "rgb(232, 240, 254)",
+                        borderRadius: "3px",
+                      },
+                    }}
+                  />
+                ) : null}
+                {tab === "withdraw" ? (
+                  <InputBase
+                    fullWidth
+                    required
+                    type="number"
+                    id="2"
+                    value={withdrawData || ""}
+                    onChange={(e) =>
+                      handleValidateNumber(e, handleChangeWithdraw)
+                    }
+                    sx={{
+                      fontSize: "16px",
+                      "& .MuiInputBase-input": {
+                        padding: "10px",
+                        backgroundColor: "rgb(232, 240, 254)",
+                        borderRadius: "3px",
+                      },
+                    }}
+                  />
+                ) : null}
+                <Box>
+                  <Typography>
+                    Available in game: {wallet?.balances || 0}
+                  </Typography>
+                  <Typography>In wallet: {balanceToken || 0}</Typography>
+                </Box>
+                <Button
+                  disableElevation
+                  type="submit"
+                  variant="contained"
+                  disabled={isLoading}
                   sx={{
-                    fontSize: "16px",
-                    "& .MuiInputBase-input": {
-                      padding: "10px",
-                      backgroundColor: "rgb(232, 240, 254)",
-                      borderRadius: "3px",
+                    "&.Mui-disabled": {
+                      color: "#fff9f938",
                     },
                   }}
-                />
-                <Typography>Balance: {wallet?.balances || 0}</Typography>
-                <Button disableElevation variant="contained">
-                  Deposit
+                >
+                  {styleActionBtn.nameBtn}
                 </Button>
               </Stack>
-            )}
-            {tab === "withdraw" && (
-              <Stack direction="column" spacing={2}>
-                <InputLabel sx={{ color: "#d1d4dc" }}>Amount2</InputLabel>
-                <InputBase
-                  fullWidth
-                  required
-                  type="number"
-                  id="2"
-                  value={amountWithdraw || ""}
-                  onChange={(e) =>
-                    handleValidateNumber(e.target.value, setAmountWithdraw)
-                  }
-                  sx={{
-                    fontSize: "16px",
-                    "& .MuiInputBase-input": {
-                      padding: "10px",
-                      backgroundColor: "rgb(232, 240, 254)",
-                      borderRadius: "3px",
-                    },
-                  }}
-                />
-                <Typography>Balance: {wallet?.balances || 0}</Typography>
-                <Button disableElevation variant="contained">
-                  Withdraw
-                </Button>
-              </Stack>
-            )}
-          </Box>
+            </Box>
+          </form>
         </Box>
       </Modal>
     </>

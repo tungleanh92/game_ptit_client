@@ -4,9 +4,11 @@ import gameContext from "../../../context/gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import { TransactionContext } from "../../../context/TransactionContext-caro";
-import { Modal, Button } from 'antd';
-import { toast } from 'react-toastify';
-import { Timer } from '../../../Chess-client/Game/Timer'
+import { toast } from "react-toastify";
+import { Timer } from "../../../Chess-client/Game/Timer";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 const GameContainer = styled.div`
   display: flex;
@@ -79,9 +81,11 @@ export interface IStartGame {
 }
 
 export function Game() {
-  const [matrix, setMatrix] = useState<IPlayMatrix>(new Array(25).fill(null).map(() => (new Array(25).fill(null))));
-  const [message, setMessage] = useState('tie')
-  const [moveCount, setMoveCount] = useState(0)
+  const [matrix, setMatrix] = useState<IPlayMatrix>(
+    new Array(25).fill(null).map(() => new Array(25).fill(null))
+  );
+  const [message, setMessage] = useState("tie");
+  const [moveCount, setMoveCount] = useState(0);
   const {
     playerSymbol,
     setPlayerSymbol,
@@ -89,15 +93,16 @@ export function Game() {
     isPlayerTurn,
     setGameStarted,
     isGameStarted,
-    setInRoom
+    setInRoom,
   } = useContext(gameContext);
-  const [stateP1, setStateP1] = useState({ resume: 0, pause: 0 })
-  const [stateP0, setStateP0] = useState({ resume: 0, pause: 0 })
-  const { winnerClaim, playerClaimBack, updateBalance } = useContext(TransactionContext);
-  const [thisTurn, setThisTurn] = useState('o')
+  const [stateP1, setStateP1] = useState({ resume: 0, pause: 0 });
+  const [stateP0, setStateP0] = useState({ resume: 0, pause: 0 });
+  const { winnerClaim, playerClaimBack, updateBalance } =
+    useContext(TransactionContext);
+  const [thisTurn, setThisTurn] = useState("o");
 
   function checkWin(row: any, col: any, user: any, matrix: any) {
-    setMoveCount(moveCount + 1)
+    setMoveCount(moveCount + 1);
     const squares = matrix;
 
     // Get coordinates
@@ -109,7 +114,7 @@ export function Game() {
     let countMainDiagonal = 1;
     let countSkewDiagonal = 1;
     let isBlock;
-    const rival = (user == "x") ? "o" : "x";
+    const rival = user == "x" ? "o" : "x";
 
     // Check col
     isBlock = true;
@@ -182,7 +187,11 @@ export function Game() {
     winCells.push([coorX, coorY]);
     coorX += 1;
     coorY += 1;
-    while (coorX <= 25 - 1 && coorY <= 25 - 1 && squares[coorX][coorY] === user) {
+    while (
+      coorX <= 25 - 1 &&
+      coorY <= 25 - 1 &&
+      squares[coorX][coorY] === user
+    ) {
       countMainDiagonal += 1;
       winCells.push([coorX, coorY]);
       coorX += 1;
@@ -214,7 +223,11 @@ export function Game() {
     winCells.push([coorX, coorY]);
     coorX += 1;
     coorY -= 1;
-    while (coorX <= 25 - 1 && coorY <= 25 - 1 && squares[coorX][coorY] === user) {
+    while (
+      coorX <= 25 - 1 &&
+      coorY <= 25 - 1 &&
+      squares[coorX][coorY] === user
+    ) {
       countSkewDiagonal += 1;
       winCells.push([coorX, coorY]);
       coorX += 1;
@@ -225,12 +238,16 @@ export function Game() {
     }
     if (isBlock === false && countSkewDiagonal >= 5) return winCells;
     if (moveCount == 313) {
-      return 'tie'
+      return "tie";
     }
     return null;
   }
 
-  const updateGameMatrix = async (column: number, row: number, symbol: "x" | "o") => {
+  const updateGameMatrix = async (
+    column: number,
+    row: number,
+    symbol: "x" | "o"
+  ) => {
     const newMatrix = [...matrix];
     if (newMatrix[row][column] === null || newMatrix[row][column] === "null") {
       newMatrix[row][column] = symbol;
@@ -239,35 +256,44 @@ export function Game() {
 
     if (socketService.socket) {
       gameService.updateGame(socketService.socket, newMatrix, symbol);
-      const result = checkWin(row, column, symbol, newMatrix)
+      const result = checkWin(row, column, symbol, newMatrix);
       if (result && result.length == 5) {
         gameService.gameWin(socketService.socket, "lost");
-        setMessage('win')
-        const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
+        setMessage("win");
+        const rs =
+          message == "tie"
+            ? "Game tie!"
+            : message == "lost"
+            ? "You lost!"
+            : "You win!";
         toast(rs);
-        await winnerClaim()
-        setInRoom(false)
+        await winnerClaim();
+        setInRoom(false);
       }
-      if (result == 'tie') {
+      if (result == "tie") {
         gameService.gameWin(socketService.socket, "tie");
-        setMessage('tie')
-        const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
+        setMessage("tie");
+        const rs =
+          message == "tie"
+            ? "Game tie!"
+            : message == "lost"
+            ? "You lost!"
+            : "You win!";
         toast(rs);
-        await playerClaimBack()
-        setInRoom(false)
+        await playerClaimBack();
+        setInRoom(false);
       }
-      if (symbol == 'x') {
-        setStateP0({ pause: 1, resume: 0 })
-        setStateP1({ pause: 0, resume: 1 })
-      }
-      else {
-        setStateP1({ pause: 1, resume: 0 })
-        setStateP0({ pause: 0, resume: 1 })
-      }
-      if(thisTurn == 'x') {
-        setThisTurn('o')
+      if (symbol == "x") {
+        setStateP0({ pause: 1, resume: 0 });
+        setStateP1({ pause: 0, resume: 1 });
       } else {
-        setThisTurn('x')
+        setStateP1({ pause: 1, resume: 0 });
+        setStateP0({ pause: 0, resume: 1 });
+      }
+      if (thisTurn == "x") {
+        setThisTurn("o");
+      } else {
+        setThisTurn("x");
       }
       setPlayerTurn(false);
     }
@@ -276,13 +302,12 @@ export function Game() {
   const handleGameUpdate = () => {
     if (socketService.socket)
       gameService.onGameUpdate(socketService.socket, (newMatrix, move) => {
-        if (move == 'x') {
-          setStateP0({ pause: 1, resume: 0 })
-          setStateP1({ pause: 0, resume: 1 })
-        }
-        else {
-          setStateP1({ pause: 1, resume: 0 })
-          setStateP0({ pause: 0, resume: 1 })
+        if (move == "x") {
+          setStateP0({ pause: 1, resume: 0 });
+          setStateP1({ pause: 0, resume: 1 });
+        } else {
+          setStateP1({ pause: 1, resume: 0 });
+          setStateP0({ pause: 0, resume: 1 });
         }
         setMatrix(newMatrix);
         setPlayerTurn(true);
@@ -302,39 +327,56 @@ export function Game() {
   const handleGameWin = () => {
     if (socketService.socket)
       gameService.onGameWin(socketService.socket, async (message) => {
-        setMessage(message)
-        const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
+        setMessage(message);
+        const rs =
+          message == "tie"
+            ? "Game tie!"
+            : message == "lost"
+            ? "You lost!"
+            : "You win!";
         toast(rs);
-        if (message == 'tie') {
-          await playerClaimBack()
-          setInRoom(false)
+        if (message == "tie") {
+          await playerClaimBack();
+          setInRoom(false);
+        } else {
+          setInRoom(false);
         }
-        if (message == 'win') {
-          await winnerClaim()
-          setInRoom(false)
+        if (message == "win") {
+          await winnerClaim();
+          setInRoom(false);
         }
         setPlayerTurn(false);
       });
 
-    updateBalance()
+    updateBalance();
   };
 
   async function handleExpireTime() {
     if (socketService.socket) {
-      if (thisTurn == 'x') {
+      if (thisTurn == "x") {
         gameService.gameWin(socketService.socket, "win");
-        setMessage('lost')
-        const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
+        setMessage("lost");
+        const rs =
+          message == "tie"
+            ? "Game tie!"
+            : message == "lost"
+            ? "You lost!"
+            : "You win!";
         toast(rs);
-        setInRoom(false)
+        setInRoom(false);
         console.log("you lost!");
       }
-      if (thisTurn == 'o') {
+      if (thisTurn == "o") {
         gameService.gameWin(socketService.socket, "win");
-        setMessage('lost')
-        const rs = message == 'tie' ? "Game tie!" : message == 'lost' ? "You lost!" : "You win!"
+        setMessage("lost");
+        const rs =
+          message == "tie"
+            ? "Game tie!"
+            : message == "lost"
+            ? "You lost!"
+            : "You win!";
         toast(rs);
-        setInRoom(false)
+        setInRoom(false);
         console.log("you lost!");
       }
     }
@@ -347,64 +389,116 @@ export function Game() {
   }, []);
 
   useEffect(() => {
-    if(isGameStarted) {
-      setStateP0({ pause: 0, resume: 1 })
+    if (isGameStarted) {
+      setStateP0({ pause: 0, resume: 1 });
     }
-  }, [isGameStarted])
+  }, [isGameStarted]);
 
   return (
     <GameContainer>
       {!isGameStarted && (
-        <>
-          <h2 style={{ color: "#8e44ad" }}>Waiting for Other Player to Join to Start the Game!</h2>
-          <Button style={{ zIndex: 100 }} onClick={async () => {
-            await playerClaimBack()
+        <h2
+          style={{
+            color: "#8e44ad",
+            textAlign: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          Waiting for Other Player to Join to Start the Game!
+        </h2>
+      )}
+
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          color: "#d1d4dc",
+        }}
+        mb={1}
+      >
+        <Box>
+          <Timer
+            state={stateP0}
+            onExpireTime={handleExpireTime}
+            name={"Host: "}
+            style={{
+              flexDirection: "row-reverse",
+            }}
+          />
+        </Box>
+        ||
+        <Box>
+          <Timer
+            state={stateP1}
+            onExpireTime={handleExpireTime}
+            name={"Guest: "}
+          />
+        </Box>
+      </Stack>
+      <Box>
+        <Box
+          sx={{
+            position: "relative",
+            backgroundColor: "#101B27",
+            padding: "20px",
+            borderRadius: "15px",
+          }}
+        >
+          {(!isGameStarted || !isPlayerTurn) && (
+            <PlayStopper
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+              }}
+            />
+          )}
+          {matrix.map((row, rowIdx) => {
+            return (
+              // eslint-disable-next-line react/jsx-key
+              <RowContainer key={rowIdx}>
+                {row.map((column, columnIdx) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <Cell
+                    borderRight={columnIdx < 24}
+                    borderLeft={columnIdx > 0}
+                    borderBottom={rowIdx < 24}
+                    borderTop={rowIdx > 0}
+                    onClick={() =>
+                      updateGameMatrix(columnIdx, rowIdx, playerSymbol)
+                    }
+                  >
+                    {column && column !== null ? (
+                      column === "x" ? (
+                        <X />
+                      ) : (
+                        <O />
+                      )
+                    ) : null}
+                  </Cell>
+                ))}
+              </RowContainer>
+            );
+          })}
+        </Box>
+        <Button
+          disableElevation
+          sx={{
+            mt: 1,
+          }}
+          onClick={async () => {
+            await playerClaimBack();
             if (socketService.socket) {
+              await gameService.leaveRoom(socketService.socket);
               socketService.socket.emit("update_waiting_games");
             }
-            setInRoom(false)
-          }
-          }>
-            Back Home
-          </Button>
-        </>
-      )}
-      {(!isGameStarted || !isPlayerTurn) && <PlayStopper />}
-      <Timer
-        state={stateP0}
-        onExpireTime={handleExpireTime}
-        name={"Host: "} />
-      <Timer
-        state={stateP1}
-        onExpireTime={handleExpireTime}
-        name={"Guest: "} />
-      {matrix.map((row, rowIdx) => {
-        return (
-          // eslint-disable-next-line react/jsx-key
-          <RowContainer>
-            {row.map((column, columnIdx) => (
-              // eslint-disable-next-line react/jsx-key
-              <Cell
-                borderRight={columnIdx < 24}
-                borderLeft={columnIdx > 0}
-                borderBottom={rowIdx < 24}
-                borderTop={rowIdx > 0}
-                onClick={() =>
-                  updateGameMatrix(columnIdx, rowIdx, playerSymbol)
-                }
-              >
-                {column && column !== null ? (
-                  column === "x" ? (
-                    <X />
-                  ) : (
-                    <O />
-                  )
-                ) : null}
-              </Cell>
-            ))}
-          </RowContainer>
-        );
-      })}
+            setInRoom(false);
+          }}
+        >
+          Leave room
+        </Button>
+      </Box>
     </GameContainer>
   );
 }

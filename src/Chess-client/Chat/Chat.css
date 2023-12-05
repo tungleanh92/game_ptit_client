@@ -129,7 +129,7 @@
   }
 
   .messages {
-    height: 30vw;
+    /* height: 30vw; */
     width: 20vw;
     padding: 5% 0;
     overflow: auto;

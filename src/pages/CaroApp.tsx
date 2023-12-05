@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { io } from "socket.io-client";
 import GameContext, { IGameContextProps } from "../context/gameContext";
-import * as urlAPI from '../utils/url'
 import socketService from "../Caro-client/services/socketService";
 import { JoinRoom } from "../Caro-client/components/joinRoom";
 import { Game } from "../Caro-client/components/game";
+
+const baseUrl = process.env.REACT_APP_BASE_URL;
+const socketUrl = process.env.REACT_APP_WEBSOCKET;
 
 const AppContainer = styled.div`
   width: 100%;
@@ -32,7 +34,7 @@ function App() {
 
   const connectSocket = async () => {
     const socket = await socketService
-      .connect(`http://${urlAPI.url}${urlAPI.port}`)
+      .connect(socketUrl || "")
       .catch((err: any) => {
         console.log("Error: ", err);
       });

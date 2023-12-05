@@ -12,7 +12,7 @@ export const contractVaultABI = abiVault.abi;
 export const gameContractAddress = "0xEcb1e6e4d44EeB24a6a41443ABd70090ac871E75";
 export const contractGameABI = abiGame.abi;
 
-export const gameCompetitiveContractAddress = "0x02Ed01167Edb727E2C9cF75ef2f405E1E3C92AAf";
+export const gameCompetitiveContractAddress = "0x8193217a5749DcA6bF53233a97e1e1a8a8d49d09";
 export const contractGameCompetitiveABI = abiCompetitveGame.abi;
 
 

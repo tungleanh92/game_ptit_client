@@ -10,35 +10,23 @@ import { useToggle } from "../../hooks/useToggle";
 import Popover from "@mui/material/Popover";
 import DepositWithdraw from "../modal/DepositWithdraw";
 import { useCopy } from "../../hooks/useCopy";
-import CopyIcon from "../../icons/CopyIcon";
 import PlayGameIcon from "../../icons/PlayGameIcon";
 import ConnectWalletButton from "../../connect-wallet/ui/connect-wallet-button";
 
 const Header = () => {
-  const { connectWallet, wallet } = useContext(AppContext);
+  const { wallet } = useContext(AppContext);
   const [isModalOpen, setOpenModal] = useToggle(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-
   const { isCopied, copy } = useCopy(wallet?.address || "");
 
-  const addressShort = useMemo(() => {
-    return wallet?.address
-      ? [wallet?.address.slice(0, 4), "...", wallet?.address.slice(-4)]
-      : "";
-  }, [wallet]);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-    connectWallet()
-    // setOpenModal(true);
-  };
   const handleClose = () => {
     setAnchorEl(null);
     setOpenModal(false);
   };
 
+  console.log("triggle_2");
   console.log(wallet);
 
   return (
@@ -91,15 +79,6 @@ const Header = () => {
           </Stack>
           <Stack direction="row" spacing={2}>
             <DepositWithdraw />
-            {/* <Button
-              onClick={handleClick}
-              variant="outlined"
-              sx={{
-                padding: "12px",
-              }}
-            >
-              {wallet?.address ? addressShort : "Connect wallet"}
-            </Button> */}
             <ConnectWalletButton />
             <Popover
               open={isModalOpen}

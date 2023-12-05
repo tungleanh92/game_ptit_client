@@ -51,7 +51,6 @@ const MainContainer = styled.div`
 const Menu = () => {
   const { handleChangeFaucetClaim, faucetClaimData, faucetClaim } =
     useContext<any>(TransactionContext);
-
   const [isDisable, setIsDisable] = useState(false);
 
   return (

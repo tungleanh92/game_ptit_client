@@ -16,7 +16,11 @@ import { useHistory } from "react-router-dom";
 import { Chess } from "chess.js";
 import { Timer } from "./TimerV2";
 import { Chessboard, Square, Pieces } from "react-chessboard";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 
 const lastRows = [
   "a1",
@@ -62,6 +66,8 @@ export const Game = () => {
   const [stateP0, setStateP0] = useState(true); // { resume: 1, pause: 0 }
 
   function resign() {
+    console.log("triggle_1");
+
     if (playerTurn == "w" && username == usernames[0]) {
       socket.emit("clickResign", { gameId: gameId, player: "w" });
     }
@@ -244,8 +250,13 @@ export const Game = () => {
     <>
       <div className="Game">
         {isStart ? (
-          <>
-            <div className="game-container">
+          <Container maxWidth="lg">
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+              alignItems="flex-end"
+            >
               <div>
                 <Dialog
                   open={open}
@@ -269,22 +280,34 @@ export const Game = () => {
                     </Button>
                   </DialogActions>
                 </Dialog>
-                <h1 style={{ color: "#3f51b5" }}>Timer</h1>
-                <Timer
-                  state={stateP0}
-                  onExpireTime={handleExpireTime}
-                  name={usernames[0]}
-                  ref={childRef0}
-                />
-                <Timer
-                  state={stateP1}
-                  onExpireTime={handleExpireTime}
-                  name={usernames[1]}
-                  ref={childRef1}
-                />
-                <h1 style={{ color: "#3f51b5" }}>
-                  {usernames[0] === username ? usernames[1] : usernames[0]}
-                </h1>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-end"
+                  mb={1}
+                >
+                  <Box>
+                    <h1 style={{ color: "#3f51b5" }}>Timer</h1>
+                    <Timer
+                      state={stateP0}
+                      onExpireTime={handleExpireTime}
+                      name={usernames[0]}
+                      ref={childRef0}
+                    />
+                    <Timer
+                      state={stateP1}
+                      onExpireTime={handleExpireTime}
+                      name={usernames[1]}
+                      ref={childRef1}
+                    />
+                    <h1 style={{ color: "#3f51b5" }}>
+                      {usernames[0] === username ? usernames[1] : usernames[0]}
+                    </h1>
+                  </Box>
+                  <Button onClick={resign} variant="contained" color="primary">
+                    Resign
+                  </Button>
+                </Stack>
                 <Chessboard
                   position={chess.fen()}
                   onPieceDrop={onDrop}
@@ -295,26 +318,29 @@ export const Game = () => {
                 <h1 style={{ color: "#3f51b5" }}>
                   {usernames[0] === username ? usernames[0] : usernames[1]}
                 </h1>
-                <Button onClick={resign} variant="contained" color="primary">
-                  Resign
-                </Button>
               </div>
               <Chat />
-            </div>
-          </>
+            </Stack>
+          </Container>
         ) : (
-          <>
-            <div style={{ color: "#3f51b5" }} className="game-lobby-container">
-              <h1>Welcome to Online Chess!</h1>
-              <p>
-                Hey {username}! This app was made so that you can play chess
-                with your friends at the comfort of your own home!
-              </p>
-              <div>
-                <p>Waiting for the other one to start ...</p>
-              </div>
-            </div>
-          </>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: ".5rem",
+              alignItems: "center",
+              top: "5rem",
+              position: "relative",
+              color: "#d1d4dc",
+            }}
+          >
+            <Typography variant="h4">Welcome to Online Chess!</Typography>
+            <Typography>
+              Hey {username}! This app was made so that you can play chess with
+              your friends at the comfort of your own home!
+            </Typography>
+            <Typography>Waiting for the other one to start...</Typography>
+          </Box>
         )}
       </div>
     </>

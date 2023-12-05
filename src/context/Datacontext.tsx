@@ -1,18 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { socket } from "../Chess-client/socket/socket";
-import { useLocation } from "react-router-dom";
 import { ethers } from "ethers";
 import { contractGameCompetitiveABI, contractVaultABI, gameCompetitiveContractAddress, vaultContractAddress, tokenContractAddress, contractTokenABI } from "../utils/constants";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { customAlphabet } from 'nanoid'
-import * as urlAPI from '../utils/url'
+
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const nanoid = customAlphabet('1234567890', 6)
 const callApi = async (url: any, method: any, data: any, success: any) => {
     return axios({
-        url: `http://${urlAPI.url}${urlAPI.port}/chess/${url}`,
+        url: `${baseUrl}/chess/${url}`,
         method: method,
         data: { data: data },
     })
@@ -68,7 +68,7 @@ export const DatacontextProvider = (props: ChildrenType) => {
     const [depositData, setDepositData] = useState("");
     const [withdrawData, setWithdrawData] = useState("");
     const [faucetClaimData, setFaucetClaimData] = useState("");
-    const [joinGameData, setJoinGameData] = useState("100");
+    const [joinGameData, setJoinGameData] = useState("1");
     const [joinGameBtn, setJoinGameBtn] = useState(false);
 
     const [wallet, setWallet] = useState({ address: "", balances: "0" });

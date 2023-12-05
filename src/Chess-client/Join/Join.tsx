@@ -91,14 +91,6 @@ const JoinButton = styled.button`
   margin-bottom: 30px;
 `;
 
-const MainContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 export const Join = () => {
   const {
     redirect,
@@ -124,9 +116,10 @@ export const Join = () => {
     faucetClaim,
     setJoinGameBtn,
   } = useContext<any>(Datacontext);
-
   const [rooms, setRooms] = useState<any>([]);
 
+  console.log('triggle');
+  
   useEffect(() => {
     if (!socket) return;
     socket.emit("updateWaitingGames_chess");
@@ -170,9 +163,9 @@ export const Join = () => {
   const handleCreateGame = () => {
     if (username === "") {
       toast.error("Nickname required");
-      //   return;
+      return;
     }
-    // generateGameId();
+    generateGameId();
   };
 
   return (
@@ -353,9 +346,9 @@ export const Join = () => {
                     },
                   }}
                 >
-                  <MenuItem value={100}>100</MenuItem>
-                  <MenuItem value={200}>200</MenuItem>
-                  <MenuItem value={300}>300</MenuItem>
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
                 </TextField>
                 <Button
                   variant="contained"

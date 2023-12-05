@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 
-const connection = "http://localhost:4000";
+const connection = process.env.REACT_APP_WEBSOCKET || "";
 
 export const socket = io(connection);
 

@@ -7,8 +7,6 @@ import { ToastContainer } from "react-toastify";
 import WagmiProvider from "../../connect-wallet/provider";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  console.log("123");
-
   return (
     <Stack direction="column" height="inherit">
       <ToastContainer />

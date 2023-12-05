@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { contractGameABI, contractVaultABI, gameContractAddress, vaultContractAddress } from '../utils/constants';
+import {
+  contractGameABI,
+  contractVaultABI,
+  gameContractAddress,
+  vaultContractAddress,
+} from "../utils/constants";
 import axios from "axios";
-import * as urlAPI from "../utils/url";
 
 export const TransactionContext = React.createContext({});
 
 const { ethereum } = window;
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const createEthereumVaultContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
-  const transactionsVaultContract = new ethers.Contract(vaultContractAddress, contractVaultABI, signer);
+  const transactionsVaultContract = new ethers.Contract(
+    vaultContractAddress,
+    contractVaultABI,
+    signer
+  );
 
   return transactionsVaultContract;
 };
@@ -19,7 +28,11 @@ const createEthereumVaultContract = () => {
 const createEthereumGameContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
-  const transactionsGameContract = new ethers.Contract(gameContractAddress, contractGameABI, signer);
+  const transactionsGameContract = new ethers.Contract(
+    gameContractAddress,
+    contractGameABI,
+    signer
+  );
 
   return transactionsGameContract;
 };
@@ -36,39 +49,39 @@ export const TransactionsProvider = (props: ChildrenType) => {
   // eslint-disable-next-line
   const [joinGameData, setJoinGameData] = useState<any>("100");
   // eslint-disable-next-line
-  const [gameId, setGameId] = useState<any>(0)
+  const [gameId, setGameId] = useState<any>(0);
 
   const [wallet, setWallet] = useState({ address: "", balances: "0" });
   const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line
   const handleChangeDeposit = (e: any) => {
-    setDepositData(() => (e.target.value));
+    setDepositData(() => e.target.value);
   };
 
   // eslint-disable-next-line
   const handleChangeWithdraw = (e: any) => {
-    setWithdrawData(() => (e.target.value));
+    setWithdrawData(() => e.target.value);
   };
 
   // eslint-disable-next-line
   const handleChangeFaucetClaim = (e: any) => {
-    setFaucetClaimData(() => (e.target.value));
+    setFaucetClaimData(() => e.target.value);
   };
 
   // eslint-disable-next-line
   const handleChangeJoinGame = (e: any) => {
     console.log(e.target.value);
-    setJoinGameData(() => (e.target.value));
+    setJoinGameData(() => e.target.value);
   };
 
   // eslint-disable-next-line
   const handleChangeGameId = (value: any) => {
-    setGameId(() => (value));
+    setGameId(() => value);
   };
 
   const updateBalance = async () => {
-    console.log('checkIfWalletIsConnect');
+    console.log("checkIfWalletIsConnect");
     try {
       if (!ethereum) return alert("Please install MetaMask.");
 
@@ -78,19 +91,27 @@ export const TransactionsProvider = (props: ChildrenType) => {
 
       setWallet({
         address: wallet.address,
-        balances: ethers.utils.formatEther(balances)
-      })
-      await callApi('updateBalance', "POST", {address: wallet.address, balance: ethers.utils.formatEther(balances)}, function () {
-        return
-      })
+        balances: ethers.utils.formatEther(balances),
+      });
+      await callApi(
+        "updateBalance",
+        "POST",
+        {
+          address: wallet.address,
+          balance: ethers.utils.formatEther(balances),
+        },
+        function () {
+          return;
+        }
+      );
       // dispatch(doUpdateBalance({address: wallet.address, balance: wallet.balances}))
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const checkIfWalletIsConnect = async () => {
-    console.log('checkIfWalletIsConnect');
+    console.log("checkIfWalletIsConnect");
     try {
       if (!ethereum) return alert("Please install MetaMask.");
 
@@ -103,8 +124,8 @@ export const TransactionsProvider = (props: ChildrenType) => {
       if (accounts.length) {
         setWallet({
           address: accounts[0],
-          balances: ethers.utils.formatEther(balances)
-        })
+          balances: ethers.utils.formatEther(balances),
+        });
       } else {
         console.log("No accounts found");
       }
@@ -114,21 +135,22 @@ export const TransactionsProvider = (props: ChildrenType) => {
   };
 
   const connectWallet = async () => {
-    console.log('connectWallet');
+    console.log("connectWallet");
     try {
       if (!ethereum) return alert("Please install MetaMask.");
-      console.log('1');
-      const accounts = await ethereum.request({ method: "eth_requestAccounts", });
-      console.log('2');
+      console.log("1");
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("2");
 
       const transactionsContract = createEthereumVaultContract();
       const balances = await transactionsContract.viewPlayersBalance();
       console.log(ethers.utils.formatEther(balances));
       setWallet({
         address: accounts[0],
-        balances: ethers.utils.formatEther(balances)
-      })
-
+        balances: ethers.utils.formatEther(balances),
+      });
     } catch (error) {
       console.log(error);
 
@@ -139,13 +161,15 @@ export const TransactionsProvider = (props: ChildrenType) => {
   // eslint-disable-next-line
   const depositToken = async (e: any) => {
     e.preventDefault();
-    console.log('depositToken');
+    console.log("depositToken");
     try {
       if (ethereum) {
         const transactionsContract = createEthereumVaultContract();
         const parsedAmount = ethers.utils.parseEther(depositData);
 
-        const transactionHash = await transactionsContract.depositToken(parsedAmount);
+        const transactionHash = await transactionsContract.depositToken(
+          parsedAmount
+        );
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
@@ -156,13 +180,21 @@ export const TransactionsProvider = (props: ChildrenType) => {
         const balances = await transactionsContract.viewPlayersBalance();
         setWallet({
           address: wallet.address,
-          balances: ethers.utils.formatEther(balances)
-        })
+          balances: ethers.utils.formatEther(balances),
+        });
         console.log(ethers.utils.formatEther(balances));
         // dispatch(doUpdateBalance({address: wallet.address, balance: ethers.utils.formatEther(balances)}))
-        await callApi('updateBalance', "POST", {address: wallet.address, balance: ethers.utils.formatEther(balances)}, function () {
-          return
-        })
+        await callApi(
+          "updateBalance",
+          "POST",
+          {
+            address: wallet.address,
+            balance: ethers.utils.formatEther(balances),
+          },
+          function () {
+            return;
+          }
+        );
       } else {
         console.log("No ethereum object");
       }
@@ -176,13 +208,15 @@ export const TransactionsProvider = (props: ChildrenType) => {
   // eslint-disable-next-line
   const withdrawToken = async (e: any) => {
     e.preventDefault();
-    console.log('withdrawToken');
+    console.log("withdrawToken");
     try {
       if (ethereum) {
         const transactionsContract = createEthereumVaultContract();
         const parsedAmount = ethers.utils.parseEther(withdrawData);
 
-        const transactionHash = await transactionsContract.withdrawToken(parsedAmount.toString());
+        const transactionHash = await transactionsContract.withdrawToken(
+          parsedAmount.toString()
+        );
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
@@ -193,13 +227,20 @@ export const TransactionsProvider = (props: ChildrenType) => {
         const balances = await transactionsContract.viewPlayersBalance();
         setWallet({
           address: wallet.address,
-          balances: ethers.utils.formatEther(balances)
-        })
-        await callApi('updateBalance', "POST", {address: wallet.address, balance: ethers.utils.formatEther(balances)}, function () {
-          return
-        })
+          balances: ethers.utils.formatEther(balances),
+        });
+        await callApi(
+          "updateBalance",
+          "POST",
+          {
+            address: wallet.address,
+            balance: ethers.utils.formatEther(balances),
+          },
+          function () {
+            return;
+          }
+        );
         // dispatch(doUpdateBalance({address: wallet.address, balance: wallet.balances}))
-
       } else {
         console.log("No ethereum object");
       }
@@ -212,12 +253,14 @@ export const TransactionsProvider = (props: ChildrenType) => {
 
   // eslint-disable-next-line
   const faucetClaim = async () => {
-    console.log('faucetClaim');
+    console.log("--faucetClaim--");
     try {
       if (ethereum) {
         const transactionsContract = createEthereumVaultContract();
 
-        const transactionHash = await transactionsContract.faucetClaim(faucetClaimData);
+        const transactionHash = await transactionsContract.faucetClaim(
+          faucetClaimData
+        );
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
@@ -226,16 +269,26 @@ export const TransactionsProvider = (props: ChildrenType) => {
         setIsLoading(false);
 
         const balances = await transactionsContract.viewPlayersBalance();
+
+        console.log(balances);
+
         setWallet({
           address: wallet.address,
-          balances: ethers.utils.formatEther(balances)
-        })
+          balances: ethers.utils.formatEther(balances),
+        });
 
-        await callApi('updateBalance', "POST", {address: wallet.address, balance: ethers.utils.formatEther(balances)}, function () {
-          return
-        })
+        await callApi(
+          "updateBalance",
+          "POST",
+          {
+            address: wallet.address,
+            balance: ethers.utils.formatEther(balances),
+          },
+          function () {
+            return;
+          }
+        );
         // dispatch(doUpdateBalance({address: wallet.address, balance: wallet.balances}))
-
       } else {
         console.log("No ethereum object");
       }
@@ -249,12 +302,12 @@ export const TransactionsProvider = (props: ChildrenType) => {
   // eslint-disable-next-line
   const callApi = async (url: any, method: any, data: any, success: any) => {
     return axios({
-      url: `http://${urlAPI.url}${urlAPI.port}/${url}`,
+      url: `${baseUrl}/${url}`,
       method: method,
       data: { data: data },
     })
       .then(function (res) {
-        success(res.data.data)
+        success(res.data.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -262,29 +315,31 @@ export const TransactionsProvider = (props: ChildrenType) => {
   };
 
   const joinGame = async () => {
-    console.log('joinGame');
+    console.log("joinGame");
     let nextGameId = 1;
     // eslint-disable-next-line
-    await callApi('getLastGameId', "GET", {}, function (data: any) {
+    await callApi("getLastGameId", "GET", {}, function (data: any) {
       if (data) {
         nextGameId = data + 1;
       }
-    })
-    setGameId(nextGameId.toString())
+    });
+    setGameId(nextGameId.toString());
     console.log(nextGameId);
     try {
       if (ethereum) {
         const transactionsContract = createEthereumGameContract();
         const parsedAmount = ethers.utils.parseEther(joinGameData);
 
-        const transactionHash = await transactionsContract.joinGame(parsedAmount, nextGameId);
+        const transactionHash = await transactionsContract.joinGame(
+          parsedAmount,
+          nextGameId
+        );
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
         console.log(`Success - ${transactionHash.hash}`);
         setIsLoading(false);
-
       } else {
         console.log("No ethereum object");
       }
@@ -293,35 +348,52 @@ export const TransactionsProvider = (props: ChildrenType) => {
 
       // throw new Error("No ethereum object");
     }
-    await callApi('updateGame', "POST", {address: wallet.address, amount: joinGameData}, function () {
-      return
-    })
+    await callApi(
+      "updateGame",
+      "POST",
+      { address: wallet.address, amount: joinGameData },
+      function () {
+        return;
+      }
+    );
   };
 
   const winnerClaim = async () => {
-    console.log('winnerClaim');
+    console.log("winnerClaim");
     console.log(gameId);
     try {
       if (ethereum) {
         const transactionsContract = createEthereumGameContract();
-        const reward = joinGameData * 2
+        const reward = joinGameData * 2;
         const parsedAmount = ethers.utils.parseEther(reward.toString());
 
         const messageHash = ethers.utils.id("You win!");
-        const messageHashBytes = ethers.utils.arrayify(messageHash)
-        const signWallet = new ethers.Wallet("aff0f061438b698ab29debb6d3c9efa1855edec3055e70f70751d5f6fad3c927");
+        const messageHashBytes = ethers.utils.arrayify(messageHash);
+        const signWallet = new ethers.Wallet(
+          "aff0f061438b698ab29debb6d3c9efa1855edec3055e70f70751d5f6fad3c927"
+        );
         const flatSig = await signWallet.signMessage(messageHashBytes);
 
-        const transactionHash = await transactionsContract.winnerClaim(gameId, parsedAmount, flatSig, messageHash);
+        const transactionHash = await transactionsContract.winnerClaim(
+          gameId,
+          parsedAmount,
+          flatSig,
+          messageHash
+        );
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
         console.log(`Success - ${transactionHash.hash}`);
         setIsLoading(false);
-        await callApi('updateGame', "POST", {address: wallet.address, amount: joinGameData}, function () {
-          return
-        })
+        await callApi(
+          "updateGame",
+          "POST",
+          { address: wallet.address, amount: joinGameData },
+          function () {
+            return;
+          }
+        );
       } else {
         console.log("No ethereum object");
       }
@@ -356,7 +428,7 @@ export const TransactionsProvider = (props: ChildrenType) => {
         withdrawData,
         faucetClaimData,
         joinGameData,
-        handleChangeGameId
+        handleChangeGameId,
       }}
     >
       {props.children}
