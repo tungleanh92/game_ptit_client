@@ -11,6 +11,7 @@ import {
 } from "../utils/constants";
 import axios from "axios";
 import { generateRandomString } from "../utils/utils";
+import { useAccount } from "wagmi";
 
 export const AppContext = React.createContext<any>({});
 
@@ -210,6 +211,7 @@ export const AppProvider = (props: ChildrenType) => {
           },
           {}
         );
+        setDepositData("");
         updateAccount();
         getBalanceAllowance();
         setIsLoading(false);
@@ -252,6 +254,7 @@ export const AppProvider = (props: ChildrenType) => {
         },
         {}
       );
+      setWithdrawData("");
       updateAccount();
       setIsLoading(false);
     } catch (error) {
@@ -484,8 +487,10 @@ export const AppProvider = (props: ChildrenType) => {
   const approveBalance = async (e: any) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       if (!balanceToken) {
         console.log("No balance token");
+        setIsLoading(false);
         return;
       }
       if (ethereum && wallet.address) {
@@ -496,10 +501,9 @@ export const AppProvider = (props: ChildrenType) => {
           vaultContractAddress,
           balanceTokenApprove
         );
-        setIsLoading(true);
         await transactionHash.wait();
-        setIsLoading(false);
         await getBalanceAllowance();
+        setIsLoading(false);
       } else {
         console.log("No ethereum object");
         return 0;
@@ -517,6 +521,18 @@ export const AppProvider = (props: ChildrenType) => {
     if (wallet.address) {
       getBalanceAllowance();
     }
+  };
+
+  const reset = () => {
+    console.log("triggle reset");
+
+    setDepositData("");
+    setWithdrawData("");
+    setFaucetClaimData("");
+    setWallet({ address: "", balances: "0" });
+    setIsLoading(false);
+    setBalanceApprove("");
+    setBalanceToken("");
   };
 
   useEffect(() => {
@@ -562,6 +578,7 @@ export const AppProvider = (props: ChildrenType) => {
         balanceApprove,
         approveBalance,
         updateAccount,
+        reset,
       }}
     >
       {props.children}

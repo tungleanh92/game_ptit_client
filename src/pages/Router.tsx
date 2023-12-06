@@ -9,34 +9,37 @@ import Home from "./Home";
 import { AppProvider } from "../context/AppContext";
 import { Join } from "../Chess-client/Join/Join";
 import { Lobby } from "../Chess-client/Lobby/Lobby";
+import WagmiProvider from "../connect-wallet/provider";
 
 const Router = () => {
   return (
     <Switch>
-      <AppProvider>
-        <Layout>
-          <Route exact path="/" component={Home}></Route>
-          <Route exact path="/caro">
-            <TransactionsProviderCaro>
-              <CaroApp />
-            </TransactionsProviderCaro>
-          </Route>
-          <DatacontextProvider>
-            <Route exact path="/chess">
-              <Join />
+      <WagmiProvider>
+        <AppProvider>
+          <Layout>
+            <Route exact path="/" component={Home}></Route>
+            <Route exact path="/caro">
+              <TransactionsProviderCaro>
+                <CaroApp />
+              </TransactionsProviderCaro>
             </Route>
-            <Route exact path="/chess/game/:gameId">
-              <Lobby />
-            </Route>
-          </DatacontextProvider>
+            <DatacontextProvider>
+              <Route exact path="/chess">
+                <Join />
+              </Route>
+              <Route exact path="/chess/game/:gameId">
+                <Lobby />
+              </Route>
+            </DatacontextProvider>
 
-          <Route exact path="/faucet-claim">
-            <TransactionsProvider>
-              <FaucetClaim />
-            </TransactionsProvider>
-          </Route>
-        </Layout>
-      </AppProvider>
+            <Route exact path="/faucet-claim">
+              <TransactionsProvider>
+                <FaucetClaim />
+              </TransactionsProvider>
+            </Route>
+          </Layout>
+        </AppProvider>
+      </WagmiProvider>
     </Switch>
   );
 };

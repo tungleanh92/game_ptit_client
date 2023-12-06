@@ -10,11 +10,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Stack direction="column" height="inherit">
       <ToastContainer />
-      <WagmiProvider>
-        <Header />
-        <Main>{children}</Main>
-        <Footer />
-      </WagmiProvider>
+      <Header />
+      <Main>{children}</Main>
+      <Footer />
     </Stack>
   );
 };

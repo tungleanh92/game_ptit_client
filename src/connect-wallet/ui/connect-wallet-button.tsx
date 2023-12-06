@@ -1,18 +1,12 @@
-
-
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { Button, ButtonProps, useMediaQuery, useTheme } from "@mui/material";
 import { useAccount } from "wagmi";
 import { formatWalletAddress } from "../util";
-// import { formatWalletAddress } from "@/utils/util";
-// import useScreen from "@/hooks/useScreen";
+import { AppContext } from "../../context/AppContext";
 const ConnectWalletButton = (prop: ButtonProps) => {
   const { open } = useWeb3Modal();
-  const { address, isConnected } = useAccount();
-  // const theme = useTheme()
-  // const matches = useMediaQuery(theme.breakpoints.down('md'))
-  // const { isDownMd } = useScreen();
+  const { address } = useAccount();
 
   const onConnect = () => {
     console.log("Connecting");

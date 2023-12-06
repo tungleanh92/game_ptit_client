@@ -262,9 +262,9 @@ export function JoinRoom(props: IJoinRoomProps) {
               },
             }}
           >
-            <MenuItem value={0.001}>0.001</MenuItem>
-            <MenuItem value={0.002}>0.002</MenuItem>
-            <MenuItem value={0.003}>0.003</MenuItem>
+            <MenuItem value={0.1}>0.1</MenuItem>
+            <MenuItem value={0.2}>0.2</MenuItem>
+            <MenuItem value={0.3}>0.3</MenuItem>
           </TextField>
           <Button
             variant="contained"

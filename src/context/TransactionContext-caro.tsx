@@ -61,7 +61,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
   const [depositData, setDepositData] = useState("");
   const [withdrawData, setWithdrawData] = useState("");
   const [faucetClaimData, setFaucetClaimData] = useState("");
-  const [joinGameData, setJoinGameData] = useState("0.001");
+  const [joinGameData, setJoinGameData] = useState("0.1");
   const [gameId, setGameId] = useState("");
   const [gameIdName, setGameIdName] = useState("");
 
@@ -85,7 +85,11 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
   };
 
   const handleChangeGameId = (e: any) => {
-    setGameIdName(() => e.target.value);
+    const value = e.target.value;
+    const regex = new RegExp(/^((?!_).)*$/gm);
+    if (regex.test(value)) {
+      setGameIdName(() => e.target.value);
+    }
   };
 
   const updateBalance = async () => {
@@ -336,13 +340,12 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
 
       setGameId(nextGameId.toString());
       console.log(nextGameId);
-
       const transactionsContract = createEthereumGameContract();
       let parsedAmount;
       if (amount != "") {
-        parsedAmount = ethers.utils.parseEther(amount);
+        parsedAmount = ethers.utils.parseEther(`${amount}`);
       } else {
-        parsedAmount = ethers.utils.parseEther(joinGameData);
+        parsedAmount = ethers.utils.parseEther(`${joinGameData}`);
       }
       console.log(parsedAmount, "parsedAmount");
       const transactionHash = await transactionsContract.joinGame(

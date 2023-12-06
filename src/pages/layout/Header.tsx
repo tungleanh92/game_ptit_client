@@ -1,6 +1,5 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -25,9 +24,6 @@ const Header = () => {
     setAnchorEl(null);
     setOpenModal(false);
   };
-
-  console.log("triggle_2");
-  console.log(wallet);
 
   return (
     <Box
@@ -80,58 +76,6 @@ const Header = () => {
           <Stack direction="row" spacing={2}>
             <DepositWithdraw />
             <ConnectWalletButton />
-            <Popover
-              open={isModalOpen}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              slotProps={{
-                paper: {
-                  sx: {
-                    borderRadius: "3px",
-                    maxWidth: "250px",
-                    width: "100%",
-                    backgroundColor: "transparent",
-                  },
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  backgroundColor: "#233448",
-                }}
-              >
-                <Box
-                  color="#d1d4dc"
-                  sx={{
-                    padding: "12px",
-                  }}
-                >
-                  <Box display="flex" flexDirection="row" alignItems="center">
-                    <Typography
-                      flex={1}
-                      sx={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        cursor: "pointer",
-                      }}
-                      onClick={copy}
-                    >
-                      Address: {isCopied ? "Copied" : wallet?.address || null}
-                    </Typography>
-                  </Box>
-                  <Typography>Balance: {wallet?.balances || 0}</Typography>
-                </Box>
-              </Box>
-            </Popover>
           </Stack>
         </Stack>
       </Container>

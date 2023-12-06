@@ -18,6 +18,7 @@ import InputBase from "@mui/material/InputBase";
 import Button from "@mui/material/Button";
 import { AppContext } from "../../context/AppContext";
 import LoadingIcon from "../../icons/LoadingIcon";
+import { useAccount } from "wagmi";
 
 type DepositWithdrawProps = {};
 const DepositWithdraw = ({}: DepositWithdrawProps) => {
@@ -35,6 +36,7 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
     approveBalance,
   } = useContext(AppContext);
 
+  const { address, isDisconnected } = useAccount();
   const [open, setOpen] = useToggle(false);
   const [tab, setTab] = useState<"deposit" | "withdraw">("deposit");
 
@@ -45,7 +47,11 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
     const amount = tab === "deposit" ? depositData : withdrawData;
 
     if (parseFloat(amount) > parseFloat(balanceApprove) && tab === "deposit") {
-      return { action: approveBalance, nameBtn: "Approve" };
+      return {
+        action: approveBalance,
+        nameBtn: isDisabled ? "Approve..." : "Approve",
+        isDisabled,
+      };
     }
 
     if (tab === "deposit") {
@@ -62,6 +68,8 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
       isDisabled,
     };
   }, [balanceApprove, depositToken, withdrawToken, approveBalance, tab]);
+
+  console.log(address);
 
   const handleValidateNumber = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -83,7 +91,7 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
 
   useEffect(() => {
     reset();
-  }, [tab]);
+  }, [tab, open]);
 
   return (
     <>
@@ -186,9 +194,11 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
                 ) : null}
                 <Box>
                   <Typography>
-                    Available in game: {wallet?.balances || 0}
+                    Available in game: {address ? wallet?.balances : "_"}
                   </Typography>
-                  <Typography>In wallet: {balanceToken || 0}</Typography>
+                  <Typography>
+                    In wallet: {address ? balanceToken : "_"}
+                  </Typography>
                 </Box>
                 <Button
                   disableElevation
