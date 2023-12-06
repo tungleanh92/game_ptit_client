@@ -277,7 +277,12 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
     }
   };
 
-  const callApi = async (url: any, method: any, data: any, success?: (data: any) => void) => {
+  const callApi = async (
+    url: any,
+    method: any,
+    data: any,
+    success?: (data: any) => void
+  ) => {
     return axios({
       url: `${baseUrl}/caro/${url}`,
       method: method,
@@ -296,6 +301,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
   const joinGame = async (amount: any, roomIdName: any) => {
     try {
       console.log("joinGame");
+      setIsLoading(true);
       const randomString = generateRandomString(5);
 
       const messageHash = ethers.utils.id(randomString);
@@ -346,11 +352,9 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
         messageHash
       );
 
-      setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
       await transactionHash.wait();
       console.log(`Success - ${transactionHash.hash}`);
-      setIsLoading(false);
 
       await callApi(
         "updateGameComp",
@@ -365,10 +369,11 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
         undefined
       );
 
-      // socket.emit("update_waiting_games");
+      setIsLoading(false);
       return { nextGameId };
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       throw new Error();
     }
   };
@@ -376,29 +381,24 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
   const winnerClaim = async () => {
     console.log("winnerClaim");
     try {
+      setIsLoading(true);
       const transactionsContract = createEthereumGameContract();
-
       const randomString = generateRandomString(5);
-
       const messageHash = ethers.utils.id(randomString);
       const messageHashBytes = ethers.utils.arrayify(messageHash);
       const signWallet = new ethers.Wallet(
         "82f2875d49e8c831c611db7b7203d5f2b6ae97f730486859fcc9babe1baa954d"
       );
       const flatSig = await signWallet.signMessage(messageHashBytes);
-
       console.log(flatSig, gameId);
-
       const transactionHash = await transactionsContract.winnerClaim(
         gameId,
         wallet.address
       );
 
-      setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
       await transactionHash.wait();
       console.log(`Success - ${transactionHash.hash}`);
-      setIsLoading(false);
       console.log(gameId);
       await callApi(
         "updateGameComp",
@@ -407,9 +407,10 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
         undefined
       );
       updateBalance();
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-
+      setIsLoading(false);
       // throw new Error("No ethereum object");
     }
   };
@@ -439,8 +440,7 @@ export const TransactionsProviderCaro = (props: ChildrenType) => {
       updateBalance();
     } catch (error) {
       console.log(error);
-
-      // throw new Error("No ethereum object");
+      throw error;
     }
   };
 

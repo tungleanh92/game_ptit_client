@@ -6,11 +6,13 @@ export const Timer = ({
   onExpireTime,
   name,
   style,
+  styleWrapper,
 }: {
   state: any;
   onExpireTime: any;
   name: any;
   style?: React.CSSProperties;
+  styleWrapper?: React.CSSProperties;
 }) => {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600);
@@ -34,9 +36,20 @@ export const Timer = ({
     }
   }, [state]);
   return (
-    <div className="actual-timer" style={style}>
-      {name}:<span> {minutes < 10 ? `0${minutes}` : minutes}</span>:
-      <span>{seconds}</span>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        ...styleWrapper,
+      }}
+    >
+      {name}
+      <div className="actual-timer" style={style}>
+        <span> {minutes < 10 ? `0${minutes}` : minutes}</span>:
+        <span>{seconds}</span>
+      </div>
     </div>
   );
 };

@@ -9,6 +9,8 @@ import { Timer } from "../../../Chess-client/Game/Timer";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { AppContext } from "../../../context/AppContext";
+import LoadingIcon from "../../../icons/LoadingIcon";
 
 const GameContainer = styled.div`
   display: flex;
@@ -84,6 +86,7 @@ export function Game() {
   const [matrix, setMatrix] = useState<IPlayMatrix>(
     new Array(25).fill(null).map(() => new Array(25).fill(null))
   );
+  const [isLeave, setIsLeave] = useState(false);
   const [message, setMessage] = useState("tie");
   const [moveCount, setMoveCount] = useState(0);
   const {
@@ -97,8 +100,9 @@ export function Game() {
   } = useContext(gameContext);
   const [stateP1, setStateP1] = useState({ resume: 0, pause: 0 });
   const [stateP0, setStateP0] = useState({ resume: 0, pause: 0 });
-  const { winnerClaim, playerClaimBack, updateBalance } =
+  const { winnerClaim, playerClaimBack, updateBalance, isLoading } =
     useContext(TransactionContext);
+  const { updateAccount } = useContext(AppContext);
   const [thisTurn, setThisTurn] = useState("o");
 
   function checkWin(row: any, col: any, user: any, matrix: any) {
@@ -268,6 +272,7 @@ export function Game() {
             : "You win!";
         toast(rs);
         await winnerClaim();
+        updateAccount();
         setInRoom(false);
       }
       if (result == "tie") {
@@ -343,6 +348,7 @@ export function Game() {
         }
         if (message == "win") {
           await winnerClaim();
+          updateAccount();
           setInRoom(false);
         }
         setPlayerTurn(false);
@@ -382,6 +388,22 @@ export function Game() {
     }
   }
 
+  const handleLeaveRoom = async () => {
+    try {
+      setIsLeave(true);
+      await playerClaimBack();
+      if (socketService.socket) {
+        await gameService.leaveRoom(socketService.socket);
+        socketService.socket.emit("update_waiting_games");
+      }
+      updateAccount();
+      setInRoom(false);
+      setIsLeave(false);
+    } catch (error) {
+      setIsLeave(false);
+    }
+  };
+
   useEffect(() => {
     handleGameUpdate();
     handleGameStart();
@@ -412,6 +434,7 @@ export function Game() {
         direction="row"
         alignItems="center"
         justifyContent="center"
+        gap={2}
         sx={{
           color: "#d1d4dc",
         }}
@@ -421,18 +444,18 @@ export function Game() {
           <Timer
             state={stateP0}
             onExpireTime={handleExpireTime}
-            name={"Host: "}
-            style={{
+            name={":Host"}
+            styleWrapper={{
               flexDirection: "row-reverse",
             }}
           />
         </Box>
-        ||
+        ~
         <Box>
           <Timer
             state={stateP1}
             onExpireTime={handleExpireTime}
-            name={"Guest: "}
+            name={"Guest:"}
           />
         </Box>
       </Stack>
@@ -484,19 +507,31 @@ export function Game() {
         </Box>
         <Button
           disableElevation
+          variant="outlined"
+          disabled={isLeave}
           sx={{
             mt: 1,
+            "&.Mui-disabled": {
+              color: "#fff9f947",
+              backgroundColor: "currentColor",
+            },
           }}
-          onClick={async () => {
-            await playerClaimBack();
-            if (socketService.socket) {
-              await gameService.leaveRoom(socketService.socket);
-              socketService.socket.emit("update_waiting_games");
-            }
-            setInRoom(false);
-          }}
+          onClick={handleLeaveRoom}
         >
-          Leave room
+          {isLeave ? (
+            <>
+              <LoadingIcon
+                sx={{
+                  width: "1.5rem",
+                  height: "1.5rem",
+                }}
+                mr={1}
+              />
+              Leave room...
+            </>
+          ) : (
+            "Leave room"
+          )}
         </Button>
       </Box>
     </GameContainer>

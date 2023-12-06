@@ -185,17 +185,17 @@ export const AppProvider = (props: ChildrenType) => {
     console.log("depositToken");
     try {
       if (ethereum) {
+        setIsLoading(true);
         const transactionsContract = createEthereumVaultContract();
         const parsedAmount = ethers.utils.parseEther(depositData);
 
         const transactionHash = await transactionsContract.depositToken(
           parsedAmount
         );
-        setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
         console.log(`Success - ${transactionHash.hash}`);
-        setIsLoading(false);
+
         const balances = await transactionsContract.viewPlayersBalance();
         setWallet({
           address: wallet.address,
@@ -212,12 +212,14 @@ export const AppProvider = (props: ChildrenType) => {
         );
         updateAccount();
         getBalanceAllowance();
+        setIsLoading(false);
       } else {
         console.log("No ethereum object");
       }
     } catch (error) {
       console.log(error);
-      // throw new Error("No ethereum object");
+      setIsLoading(false);
+      // throw error;
     }
   };
 
@@ -225,6 +227,7 @@ export const AppProvider = (props: ChildrenType) => {
     e.preventDefault();
     console.log("withdrawToken");
     try {
+      setIsLoading(true);
       const transactionsContract = createEthereumVaultContract();
       const parsedAmount = ethers.utils.parseEther(withdrawData);
 
@@ -232,12 +235,9 @@ export const AppProvider = (props: ChildrenType) => {
         parsedAmount.toString()
       );
 
-      setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
       await transactionHash.wait();
       console.log(`Success - ${transactionHash.hash}`);
-      setIsLoading(false);
-
       const balances = await transactionsContract.viewPlayersBalance();
       setWallet({
         address: wallet.address,
@@ -253,9 +253,11 @@ export const AppProvider = (props: ChildrenType) => {
         {}
       );
       updateAccount();
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-      // throw new Error("No ethereum object");
+      setIsLoading(false);
+      // throw error;
     }
   };
 
@@ -482,7 +484,7 @@ export const AppProvider = (props: ChildrenType) => {
   const approveBalance = async (e: any) => {
     e.preventDefault();
     try {
-      if(!balanceToken){
+      if (!balanceToken) {
         console.log("No balance token");
         return;
       }
@@ -512,6 +514,9 @@ export const AppProvider = (props: ChildrenType) => {
   const updateAccount = () => {
     checkIfWalletIsConnect();
     updateBalanceToken();
+    if (wallet.address) {
+      getBalanceAllowance();
+    }
   };
 
   useEffect(() => {
@@ -556,6 +561,7 @@ export const AppProvider = (props: ChildrenType) => {
         handleChangeGameId,
         balanceApprove,
         approveBalance,
+        updateAccount,
       }}
     >
       {props.children}

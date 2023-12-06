@@ -11,6 +11,8 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
+import LoadingIcon from "../../../icons/LoadingIcon";
+import { AppContext } from "../../../context/AppContext";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IJoinRoomProps {}
@@ -103,16 +105,22 @@ export function JoinRoom(props: IJoinRoomProps) {
     handleChangeGameId,
     joinGameData,
     gameIdName,
+    isLoading,
   } = useContext(TransactionContext);
+  const { updateAccount } = useContext(AppContext);
 
   const [rooms, setRooms] = useState([]);
   const [socket, setSocket] = useState<any>();
+  const [isLoadingRoom, setLoadingRoom] = useState(false);
+  const [isJoinRoom, setJoinRoom] = useState(false);
 
   useEffect(() => {
     socketService.connect(socketUrl || "");
     const socket = socketService.socket;
     if (!socket) return;
     setSocket(socket);
+    socket.emit("leave_room");
+    socket.emit("update_waiting_games");
   }, []);
 
   useEffect(() => {
@@ -135,15 +143,16 @@ export function JoinRoom(props: IJoinRoomProps) {
     e: React.FormEvent,
     message: string,
     roomId: string,
-    amount: string
+    amount: string,
+    callback?: (status: boolean) => void
   ) => {
     e.preventDefault();
     try {
+      callback?.(true);
       const socket = socketService.socket;
       if (!socket) return;
       const { nextGameId } = await joinGame(amount, roomId);
 
-      setJoining(true);
       const data = [];
       data.push(gameIdName);
       data.push(nextGameId);
@@ -163,9 +172,11 @@ export function JoinRoom(props: IJoinRoomProps) {
       console.log(joined);
 
       if (joined) setInRoom(true);
-      setJoining(false);
+      callback?.(false);
+      updateAccount();
     } catch (error) {
       console.log(error);
+      callback?.(false);
     }
   };
 
@@ -212,7 +223,7 @@ export function JoinRoom(props: IJoinRoomProps) {
         <Box
           component="form"
           flex={1}
-          onSubmit={(e) => joinRoom(e, "", "", "")}
+          onSubmit={(e) => joinRoom(e, "", "", "", setLoadingRoom)}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -255,8 +266,32 @@ export function JoinRoom(props: IJoinRoomProps) {
             <MenuItem value={0.002}>0.002</MenuItem>
             <MenuItem value={0.003}>0.003</MenuItem>
           </TextField>
-          <Button variant="contained" fullWidth type="submit">
-            Create game
+          <Button
+            variant="contained"
+            fullWidth
+            type="submit"
+            disabled={isLoadingRoom}
+            sx={{
+              "&.Mui-disabled": {
+                color: "#fff9f947",
+                backgroundColor: "currentColor",
+              },
+            }}
+          >
+            {isLoadingRoom ? (
+              <>
+                <LoadingIcon
+                  sx={{
+                    width: "1.5rem",
+                    height: "1.5rem",
+                  }}
+                  mr={1}
+                />
+                Create game...
+              </>
+            ) : (
+              "Create game"
+            )}
           </Button>
         </Box>
       </Box>
@@ -280,7 +315,7 @@ export function JoinRoom(props: IJoinRoomProps) {
                     key={index}
                     direction="column"
                     p={1}
-                    flexBasis="calc(25% - 4px)"
+                    maxWidth="200px"
                     sx={{
                       border: "1px solid #d1d4dc38",
                       borderRadius: "10px",
@@ -292,10 +327,41 @@ export function JoinRoom(props: IJoinRoomProps) {
                       className="menu-btn mt-4"
                       style={{
                         marginTop: "1rem",
+                        ...(isJoinRoom
+                          ? {
+                              color: "#fff9f947",
+                              backgroundColor: "currentColor",
+                              border: "2px solid transparent",
+                            }
+                          : {}),
                       }}
-                      onClick={(e) => joinRoom(e, room, roomId, amount)}
+                      onClick={(e) =>
+                        joinRoom(e, room, roomId, amount, setJoinRoom)
+                      }
+                      disabled={isJoinRoom}
                     >
-                      Join Game
+                      {isJoinRoom ? (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <LoadingIcon
+                            sx={{
+                              width: "1rem",
+                              height: "1rem",
+                            }}
+                            mr={1}
+                          />
+                          Join Game...
+                        </Box>
+                      ) : (
+                        "Join Game"
+                      )}
                     </JoinButton>
                   </Stack>
                 ) : null;

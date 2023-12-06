@@ -17,6 +17,7 @@ import InputLabel from "@mui/material/InputLabel";
 import InputBase from "@mui/material/InputBase";
 import Button from "@mui/material/Button";
 import { AppContext } from "../../context/AppContext";
+import LoadingIcon from "../../icons/LoadingIcon";
 
 type DepositWithdrawProps = {};
 const DepositWithdraw = ({}: DepositWithdrawProps) => {
@@ -40,6 +41,7 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
   const styleActionBtn = useMemo(() => {
     let nameBtn = "";
     let action: Function;
+    let isDisabled = isLoading;
     const amount = tab === "deposit" ? depositData : withdrawData;
 
     if (parseFloat(amount) > parseFloat(balanceApprove) && tab === "deposit") {
@@ -47,16 +49,17 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
     }
 
     if (tab === "deposit") {
-      nameBtn = "Deposit";
+      nameBtn = isDisabled ? "Deposit..." : "Deposit";
       action = depositToken;
     } else {
-      nameBtn = "Withdraw";
+      nameBtn = isDisabled ? "Withdraw..." : "Withdraw";
       action = withdrawToken;
     }
 
     return {
       nameBtn,
       action,
+      isDisabled,
     };
   }, [balanceApprove, depositToken, withdrawToken, approveBalance, tab]);
 
@@ -191,13 +194,22 @@ const DepositWithdraw = ({}: DepositWithdrawProps) => {
                   disableElevation
                   type="submit"
                   variant="contained"
-                  disabled={isLoading}
+                  disabled={styleActionBtn.isDisabled}
                   sx={{
                     "&.Mui-disabled": {
                       color: "#fff9f938",
                     },
                   }}
                 >
+                  {styleActionBtn.isDisabled ? (
+                    <LoadingIcon
+                      sx={{
+                        width: "1.5rem",
+                        height: "1.5rem",
+                      }}
+                      mr={1}
+                    />
+                  ) : null}
                   {styleActionBtn.nameBtn}
                 </Button>
               </Stack>
