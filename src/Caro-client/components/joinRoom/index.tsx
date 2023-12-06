@@ -139,6 +139,12 @@ export function JoinRoom(props: IJoinRoomProps) {
     };
   }, [socket]);
 
+  const { setGameStarted } = useContext(gameContext);
+
+  useEffect(() => {
+    setGameStarted(false);
+  }, []);
+
   const joinRoom = async (
     e: React.FormEvent,
     message: string,

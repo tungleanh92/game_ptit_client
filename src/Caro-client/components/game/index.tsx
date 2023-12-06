@@ -397,6 +397,7 @@ export function Game() {
         socketService.socket.emit("update_waiting_games");
       }
       updateAccount();
+      // setGameStarted(false);
       setInRoom(false);
       setIsLeave(false);
     } catch (error) {
@@ -508,7 +509,7 @@ export function Game() {
         <Button
           disableElevation
           variant="outlined"
-          disabled={isLeave}
+          disabled={isLeave || isLoading}
           sx={{
             mt: 1,
             "&.Mui-disabled": {
